@@ -1,0 +1,296 @@
+type Post {
+  body: String
+  commentList: [Comment] @materializer(query: "getCommentUsingPost_id")
+  created_at: DateTime
+  id: ID!
+  image: String
+  subrs: [Subrs] @materializer(query: "getSubrsListById", arguments: [{ name: "post_id", field: "id" }])
+  subrs_id: ID
+  title: String
+  username: String
+  voteList: [Vote] @materializer(query: "getVoteUsingPost_id")
+}
+  # subrs: Subrs @materializer(
+  #   query: "getSubrsListById"
+  #   arguments: [{ name: "post_id", field: "id" }]
+  #   )
+
+type Comment {
+  created_at: DateTime
+  id: ID!
+  post: Post
+    @materializer(
+      query: "getPost"
+      arguments: [{ name: "id", field: "post_id" }]
+    )
+  post_id: ID
+  text: String
+  username: String
+}
+
+type Subrs {
+  created_at: DateTime
+  id: ID!
+  postList: [Post] @materializer(query: "getPostUsingSubrs_id")
+  topic: String
+}
+
+type Vote {
+  created_at: DateTime
+  id: ID!
+  post: Post
+    @materializer(
+      query: "getPost"
+      arguments: [{ name: "id", field: "post_id" }]
+    )
+  post_id: ID
+  upvote: Boolean
+  username: String
+}
+
+"""
+These are some examples of queries generated from the schema. Feel free to modify them or add your own.
+"""
+type Query {
+  getPostList: [Post]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      select * from "Post" order by "created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
+  getPost(id: ID!): Post
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "Post"
+      configuration: "postgresql_config"
+    )
+  # getPostListByPost_ID(post_id: ID!): [Post]
+  #   @dbquery(
+  #     type: "postgresql"
+  #     schema: "public"
+  #     query: """
+  #     select * from "Post"
+  #     where "Post"."id" = $1
+  #     """
+  #     configuration: "postgresql_config"
+  #   )
+  getCommentUsingPost_id(id: ID!): [Comment]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      SELECT T."created_at", T."id", T."post_id", T."text", T."username"
+        FROM "public"."comment" T
+        WHERE T."post_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  getVoteUsingPost_id(id: ID!): [Vote]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      SELECT T."created_at", T."id", T."post_id", T."upvote", T."username"
+        FROM "public"."vote" T
+        WHERE T."post_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  # getSubrsUsingPost_id(id: ID!): [Subrs]
+  #   @dbquery(
+  #     type: "postgresql"
+  #     query: """
+  #     SELECT T."created_at", T."id", T."post_id", T."topic"
+  #       FROM "public"."subrs" T
+  #       WHERE T."post_id" = $1
+  #     """
+  #     configuration: "postgresql_config"
+  #   )
+  getCommentList: [Comment]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "comment"
+      configuration: "postgresql_config"
+    )
+  getComment(id: ID!): Comment
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "comment"
+      configuration: "postgresql_config"
+    )
+  getSubrsListById(subrs_id: ID!): [Subrs]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      select * from "subrs" where "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  getSubrsListByTopic(topic: String!): [Subrs]
+    @dbquery(
+      type: "postgresql"
+      query: """ select * from "subrs" where "topic" = $1 """
+      configuration: "postgresql_config"
+    )
+  getSubrsList: [Subrs]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "subrs"
+      configuration: "postgresql_config"
+    )
+  getSubrs(id: ID!): Subrs
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      select * from "subrs" where "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  getPostUsingSubrs_Topic(topic: String!): [Post]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      select * , "Post".id as id from "Post"
+      join "subrs" on "subrs"."id" = "Post"."subrs_id"
+      where "subrs"."topic" = $1
+      order by "Post"."created_at" desc
+      """
+      # query: """
+      # SELECT T."body", T."created_at", T."id", T."image", T."subrs_id", T."title", T."username"
+      #   FROM "public"."Post" T
+      #   WHERE T."subrs_id" = $1
+      # """
+      configuration: "postgresql_config"
+    )  
+  getPostUsingSubrs_id(id: ID!): [Post]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      SELECT T."body", T."created_at", T."id", T."image", T."subrs_id", T."title", T."username"
+        FROM "public"."Post" T
+        WHERE T."subrs_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  getVoteList: [Vote]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "vote"
+      configuration: "postgresql_config"
+    )
+  getVote(id: ID!): Vote
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "vote"
+      configuration: "postgresql_config"
+    )
+  getVotesUsingPost_id(post_id: ID!): [Vote] 
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      select * from "vote" where "post_id" = $1
+      order by "created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
+}
+
+
+
+
+
+
+
+"""
+These are some examples of mutations generated from the schema. Feel free to modify them or add your own.
+"""
+type Mutation {
+  insertPost(
+    image: String!
+    body: String!
+    subrs_id: ID!
+    title: String!
+    username: String!
+  ): Post
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "Post"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  deletePost(id: ID!): Post
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "Post"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertComment(
+    post_id: ID!
+    text: String!
+    username: String!
+  ): Comment
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "comment"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  deleteComment(id: ID!): Comment
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "comment"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertSubrs(topic: String!): Subrs
+    @dbquery(
+      type: "postgresql"
+      table: "subrs"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  deleteSubrs(id: ID!): Subrs
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "subrs"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertVote(
+    post_id: ID!
+    upvote: Boolean!
+    username: String!
+  ): Vote
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "vote"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  deleteVote(id: ID!): Vote
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "vote"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+}

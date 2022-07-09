@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer components {
+    .icon {
+        @apply h-7 w-5 cursor-pointer rounded-sm
+    }
+    .voteButtons {
+        @apply h-7 w-7 text-gray-500 bg-gray-100 p-1 rounded-md cursor-pointer
+    }
+    .postButtons {
+        @apply flex items-center space-x-1 text-sm font-semibold p-0.5 cursor-pointer rounded-sm
+    }
+}
