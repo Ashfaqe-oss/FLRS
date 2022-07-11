@@ -108,9 +108,9 @@ function PostPage() {
             </form>
             <div className="my-4 rounded-md border border-t-0 border-gray-300 bg-white py-5 pb-7 px-10">
               <hr className="py-1" />
-              {post?.commentList.map((comment) => (
+              {/* {post?.commentList.map((comment) => (
                 <Comments key={comment.id} comment={comment} />
-              ))}
+              ))} */}
             </div>
           </div>
         )}
