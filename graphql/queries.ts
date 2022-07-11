@@ -1,5 +1,14 @@
 import { gql } from "@apollo/client";
 
+
+export const GET_SUBRS_BY_LIMIT = gql`
+query MyQuery($limit: Int!) {
+    created_at
+    id
+    title
+}
+`
+
 export const GET_ALL_VOTES_BY_POST_ID = gql`
 query MyQuery($post_id: ID!){
     getVotesUsingPost_id(post_id: $post_id) {

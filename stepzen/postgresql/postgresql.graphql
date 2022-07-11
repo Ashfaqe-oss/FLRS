@@ -204,6 +204,15 @@ type Query {
       """
       configuration: "postgresql_config"
     )
+  getSubrsListByLimit(limit: Int!): [Subrs]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      select * from "subrs" order by "created_at" desc limit $1
+      """
+      configuration: "postgresql_config"
+    )
 }
 
 

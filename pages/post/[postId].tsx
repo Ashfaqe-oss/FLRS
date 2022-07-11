@@ -16,105 +16,107 @@ type FormData = {
 }
 
 function PostPage() {
-    const router = useRouter()
-    const {data: session} = useSession()
+  const router = useRouter();
+  const { data: session } = useSession();
 
-    const { loading, data, error } = useQuery(GET_POST_BY_POST_ID, {
-        variables: {
-            id: router.query.postId
-        }
-    })
+  const { loading, data, error } = useQuery(GET_POST_BY_POST_ID, {
+    variables: {
+      id: router.query.postId,
+    },
+  });
+
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<FormData>();
+
+  const [addComment] = useMutation(ADD_COMMENT, {
+    refetchQueries: [GET_POST_BY_POST_ID, "getPost"],
+  });
+
+  const onSubmit: SubmitHandler<FormData> = async (formData) => {
+    const notification = toast.loading("uploading new comment");
 
     const {
-        register,
-        setValue,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm<FormData>()
+      data: { comment },
+    } = await addComment({
+      variables: {
+        text: formData.comment,
+        post_id: router.query.postId,
+        username: session?.user?.name,
+      },
+    });
 
-    const [addComment] = useMutation(ADD_COMMENT, {
-        refetchQueries: [GET_POST_BY_POST_ID, 'getPost'],
-    })
+    console.log(comment);
+    setValue("comment", "");
 
-    const onSubmit: SubmitHandler<FormData> = async (formData) => {
+    toast.success("successfully commented", {
+      id: notification,
+      //to dismiss the already created loading notification
+    });
+  };
 
-        const notification = toast.loading('creating new post')
-        
-        const {data: {comment}} = await addComment({
-            variables: {
-                text: formData.comment,
-                post_id: router.query.postId,
-                username: session?.user?.name
-            }
-        })
+  const post: Post = data?.getPost;
+  //console.log(post);
 
-        console.log(comment)
-        setValue('comment', '')
+  // if(post) {
+  //     const { data } = useQuery(GET_ALL_COMMENTS_BY_POST_ID, {
+  //         variables: {
+  //             post_id: router.query.postId
+  //         }
+  //     })
 
-        toast.success('successfully commented', {
-            id: notification,
-            //to dismiss the already created loading notification
-        })
-    }
+  //     console.log(data)
+  //     const comment: Comment = data?.getCommentsUsingPost_id
+  //     console.log(comment)
+  // }
 
-    const post: Post = data?.getPost
-    console.log(post)
-
-    // if(post) {
-    //     const { data } = useQuery(GET_ALL_COMMENTS_BY_POST_ID, {
-    //         variables: {
-    //             post_id: router.query.postId
-    //         }
-    //     })
-    
-    //     console.log(data)
-    //     const comment: Comment = data?.getCommentsUsingPost_id
-    //     console.log(comment)
-    // }
-    
-
-   return (
-     <div className="mx-auto my-7 max-w-5xl">
-       <Post post={post} />
-       {post && (
-       <div className="-mt-1 rounded-b-md border border-t-0 border-gray-300 bg-gray-100 p-5 pl-16 smm:pl-11">
-         <p className="text-sm text-gray-500 p-2 pt-0">
-           Comment as{" "}
-           <span className="text-red-500">{session?.user?.name}</span>
-         </p>
-         <form
-           onSubmit={handleSubmit(onSubmit)}
-           className="flex smm:flex-col smm:items-start items-end justify-start"
-         >
-           <textarea
-             {...register("comment", { required: true })}
-             className="h-24 w-2/3 smm:w-5/6 rounded-md border border-gray-200 p-2 pl-4
+  if (router.query.postId) {
+    return (
+      <div className="mx-auto my-7 max-w-5xl">
+        <Post post={post} />
+        {post && (
+          <div className="-mt-1 rounded-b-md border border-t-0 border-gray-300 bg-gray-100 p-5 pl-16 smm:pl-11">
+            <p className="text-sm text-gray-500 p-2 pt-0">
+              Comment as{" "}
+              <span className="text-red-500">{session?.user?.name}</span>
+            </p>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex smm:flex-col smm:items-start items-end justify-start"
+            >
+              <textarea
+                {...register("comment", { required: true })}
+                className="h-24 w-2/3 smm:w-5/6 rounded-md border border-gray-200 p-2 pl-4
                 outline-none disabled:bg-gray-400"
-             placeholder={
-               session
-                 ? "What are your thoughts ?"
-                 : "You need to sign in first"
-             }
-           />
+                placeholder={
+                  session
+                    ? "What are your thoughts ?"
+                    : "You need to sign in first"
+                }
+              />
 
-           <button
-             type="submit"
-             className="rounded-md ml-3 mt-2 bg-red-400 px-2 py-1 md:p-3 font-semibold text-white text-xs disabled:bg-gray-200"
-           >
-             comment
-           </button>
-         </form>
-         <div className="my-4 rounded-md border border-t-0 border-gray-300 bg-white py-5 pb-7 px-10">
-           <hr className="py-1" />
-           {post?.commentList.map((comment) => (
-            <Comments key={comment.id} comment={comment}/>
-           ))}
-         </div>
-       </div>
-       )}
-     </div>
-   );
+              <button
+                type="submit"
+                className="rounded-md ml-3 mt-2 bg-red-400 px-2 py-1 md:p-3 font-semibold text-white text-xs disabled:bg-gray-200"
+              >
+                comment
+              </button>
+            </form>
+            <div className="my-4 rounded-md border border-t-0 border-gray-300 bg-white py-5 pb-7 px-10">
+              <hr className="py-1" />
+              {post?.commentList.map((comment) => (
+                <Comments key={comment.id} comment={comment} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
 }
 
 export default PostPage

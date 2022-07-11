@@ -39,16 +39,15 @@ function Feed({ subrs }: Props) {
     );
 
   return (
-
-    <div className="mt-5 space-y-4 mx-auto">
-
-        {posts?.map((post) => (
-            <Post key={post.id} post={post} />
-        ))}
-        <p className='flex justify-center items-center p-3'>The Feed section is over</p>
-
+    <div className="mt-5 space-y-4">
+      {posts?.map((post) => (
+        <Post key={post.id} post={post} />
+      ))}
+      <p className="flex justify-center items-center p-3">
+        The Feed section is over
+      </p>
     </div>
-  )
+  );
 }
 
 export default Feed
