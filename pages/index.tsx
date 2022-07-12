@@ -8,14 +8,15 @@ import SubrsRow from "../components/SubrsRow";
 import { GET_SUBRS_BY_LIMIT } from "../graphql/queries";
 
 const Home: NextPage = () => {
-  const { data } = useQuery(GET_SUBRS_BY_LIMIT, {
+  const { loading, error, data } = useQuery(GET_SUBRS_BY_LIMIT, {
     variables: {
-      limit: 10,
+      limit: 7,
     },
   });
-  console.log(data);
+
+  //console.log(error, data); -- log the errro always in case
+
   const subrs: Subrs = data?.getSubrsListByLimit;
-  console.log(subrs);
 
   return (
     <div className="my-7 mx-auto max-w-5xl">
@@ -34,14 +35,13 @@ const Home: NextPage = () => {
 
           <div>
             {/* Subrs */}
-            {data?.map(
+            {subrs?.map(
               (
                 subrs: { id: Key | null | undefined; topic: string },
                 i: number
               ) => (
                 <div>
                   <SubrsRow key={subrs?.id} topic={subrs.topic} index={i} />
-                  <h2>hello</h2>
                 </div>
               )
             )}
@@ -54,7 +54,7 @@ const Home: NextPage = () => {
       </h1>
     </div>
   );
-};
+};;
 
 export default Home;
 

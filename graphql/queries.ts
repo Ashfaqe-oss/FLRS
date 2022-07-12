@@ -3,9 +3,11 @@ import { gql } from "@apollo/client";
 
 export const GET_SUBRS_BY_LIMIT = gql`
 query MyQuery($limit: Int!) {
+    getSubrsListByLimit(limit: $limit) {
     created_at
     id
-    title
+    topic
+}
 }
 `
 

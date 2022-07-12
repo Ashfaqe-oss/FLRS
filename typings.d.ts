@@ -17,6 +17,7 @@ type Vote = {
 }
 
 type Subrs = {
+    map: any
     created_at: string
     id: number
     topic: string
