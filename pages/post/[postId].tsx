@@ -31,7 +31,7 @@ function PostPage() {
 
   const { loading, data, error } = useQuery(GET_POST_BY_POST_ID, {
     variables: {
-      id: router.query.postId,
+      id: router.query.postId, 
     },
   });
 
