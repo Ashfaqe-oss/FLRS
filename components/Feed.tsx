@@ -33,8 +33,8 @@ function Feed({ subrs }: Props) {
 
   if (!posts) 
     return (
-      <div className='flex w-full items-center justify-center p-10 text-xl'>
-        <ChaoticOrbit size={25} speed={1.5} color="black" />
+      <div className="flex w-full items-center justify-center p-10 text-xl">
+        <ChaoticOrbit size={25} speed={1.5} color="red" />
       </div>
     );
 
