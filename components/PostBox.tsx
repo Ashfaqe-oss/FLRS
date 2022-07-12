@@ -122,87 +122,95 @@ function PostBox({subrs}: Props) {
   })
 
     return (
-    <form onSubmit={onSubmit} className='sticky top-0 z-50 m-3 p-2 rounded-md border border-gray-300
-     bg-white my-5 mx-auto max-w-5xl'>
-        <div className='flex place-items-center justify-center space-x-3 '>
-          <Avatars seed='Ashf' large />
-          <input disabled={!session}
-          className="flex w-2/3 rounded-md bg-gray-50 p-2 pl-5 outline-none"
-          {...register('postTitle', {required: true})}
-          type="text"
-          placeholder={session ? subrs ? `Type a post in r/${subrs}` : 'Enter a title for a post' : 'Sign in to post'} />
-          <PhotographIcon onClick={() => setImageBoxOpen(!imageBoxOpen)} className={`h-6 text-slate-500 cursor-pointer ${imageBoxOpen && 'text-blue-500'}`}/>
-          <LinkIcon className='h-6 text-gray-300'/>
-      </div>
-       {!!watch('postTitle') && 
-              <div className="">
-              <div  className="flex items-center p-2">
-                  <p className="min-w-[90px] text-slate-500 ">
-                    Body :
-                  </p>
-                  <input 
-                  className="m2 flex-1 bg-blue-50 p-2 outline-none rounded-md" 
-                  {...register('postBody')}
-                  type="text" 
-                  placeholder="Txt" />
-                </div>
-
-                {!subrs &&
-                <div className="flex items-center p-2">
-                <p className="min-w-[90px] text-slate-500">
-                  Subrs : 
-                </p>
-                <input 
-                className="m2 flex-1 bg-blue-50 p-2 outline-none rounded-md" 
-                {...register('subrs', {required: true})}
-                type="text" 
-                placeholder="Optional ..." />
-                </div>
-                }
-                
-                {
-                  imageBoxOpen && <div className="flex items-center p-2">
-                  <p className="min-w-[90px] text-slate-500">
-                    Image url : 
-                  </p>
-                  <input 
-                  className="m2 flex-1 bg-blue-50 p-2 outline-none rounded-md" 
-                  {...register('postImage')}
-                  type="text"
-                  placeholder="optional ..." />
-                </div>
-                }
-                
-                
-              </div>
-       }
-       
-
-       {/* error handling */}
-       {Object.keys(errors).length > 0 && (
-        <div className='space-y-2 p-2 text-red-500'>
-          {errors.postTitle?.type === 'required' && (
-            <p>- A Post Title is required</p>
-          )}
-
-          {errors.subrs?.type ==='required' && (
-            <p>-- A Subrs is required</p>
-          )}
+      <form
+        onSubmit={onSubmit}
+        className="sticky top-0 z-50 m-3 p-2 rounded-md border border-gray-300
+     bg-white my-5 mx-auto max-w-5xl"
+      >
+        <div className="flex place-items-center justify-center space-x-3 ">
+          <Avatars seed={session?.username as string} large />
+          <input
+            disabled={!session}
+            className="flex w-2/3 rounded-md bg-gray-50 p-2 pl-5 outline-none"
+            {...register("postTitle", { required: true })}
+            type="text"
+            placeholder={
+              session
+                ? subrs
+                  ? `Type a post in r/${subrs}`
+                  : "Enter a title for a post"
+                : "Sign in to post"
+            }
+          />
+          <PhotographIcon
+            onClick={() => setImageBoxOpen(!imageBoxOpen)}
+            className={`h-6 text-slate-500 cursor-pointer ${
+              imageBoxOpen && "text-blue-500"
+            }`}
+          />
+          <LinkIcon className="h-6 text-gray-300" />
         </div>
-       )}
+        {!!watch("postTitle") && (
+          <div className="">
+            <div className="flex items-center p-2">
+              <p className="min-w-[90px] text-slate-500 ">Body :</p>
+              <input
+                className="m2 flex-1 bg-blue-50 p-2 outline-none rounded-md"
+                {...register("postBody")}
+                type="text"
+                placeholder="Txt"
+              />
+            </div>
 
+            {!subrs && (
+              <div className="flex items-center p-2">
+                <p className="min-w-[90px] text-slate-500">Subrs :</p>
+                <input
+                  className="m2 flex-1 bg-blue-50 p-2 outline-none rounded-md"
+                  {...register("subrs", { required: true })}
+                  type="text"
+                  placeholder="Optional ..."
+                />
+              </div>
+            )}
 
+            {imageBoxOpen && (
+              <div className="flex items-center p-2">
+                <p className="min-w-[90px] text-slate-500">Image url :</p>
+                <input
+                  className="m2 flex-1 bg-blue-50 p-2 outline-none rounded-md"
+                  {...register("postImage")}
+                  type="text"
+                  placeholder="optional ..."
+                />
+              </div>
+            )}
+          </div>
+        )}
 
-      {!!watch('postTitle') && 
-      <div className='flex place-items-center justify-center p-2'>
-        <button type='submit' className="flex justify-center  w-1/2 max-w-[230px] rounded-xl bg-rose-400 p-2 text-white">
-          Create Post 
-        </button>
-      </div> 
-      }
-    </form>
-      
-  )
+        {/* error handling */}
+        {Object.keys(errors).length > 0 && (
+          <div className="space-y-2 p-2 text-red-500">
+            {errors.postTitle?.type === "required" && (
+              <p>- A Post Title is required</p>
+            )}
+
+            {errors.subrs?.type === "required" && <p>-- A Subrs is required</p>}
+          </div>
+        )}
+
+        {!!watch("postTitle") && (
+          <div className="flex place-items-center justify-center p-2">
+            <button
+              type="submit"
+              className="flex justify-center  w-1/2 max-w-[230px] rounded-xl bg-rose-400 p-2 text-white"
+            >
+              Create Post
+            </button>
+          </div>
+        )}
+      </form>
+    );
 }
 
 export default PostBox
