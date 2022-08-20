@@ -58,7 +58,7 @@ function Header() {
         <button type="submit" hidden />
       </form>
 
-      <div className="ml-4 flex items-center flex-1 justify-self-end text-gray-500 md:hidden"></div>
+      <div className="flex items-center flex-1 justify-self-end text-gray-500 md:hidden"></div>
 
       {session ? (
         <div
