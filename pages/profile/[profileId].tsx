@@ -34,7 +34,7 @@ function ProfilePage() {
   //destructuring all the data in Post array
   const posts: Post[] = data?.getPostListByPost_username;
 
-  console.log(posts);
+  // console.log(posts);
 
   if (!posts)
     return (

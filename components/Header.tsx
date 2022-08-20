@@ -131,10 +131,3 @@ function Header() {
 }
 
 export default Header;
-
-// const handleNav = create(set => ({
-//   bears: 0,
-//   increasePopulation: () => set(state => ({ bears: state.bears + 1 })),
-// }),
-// console.log(bears)
-// )
