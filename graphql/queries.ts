@@ -1,5 +1,37 @@
 import { gql } from "@apollo/client";
 
+export const GET_POSTLIST_BY_POST_USERNAME = gql`
+query MyQuery($username: String!){
+    getPostListByPost_username(username: $username) {
+        body
+        created_at
+        id
+        image
+        title
+        username
+        subrs_id
+        commentList {
+            created_at
+            id
+            post_id
+            text
+            username
+        }
+        subrs {
+            created_at
+            id
+            topic
+        }
+        voteList {
+            created_at
+            id
+            post_id
+            upvote
+            username
+        }
+    }
+}
+`
 
 export const GET_SUBRS_BY_LIMIT = gql`
 query MyQuery($limit: Int!) {

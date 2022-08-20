@@ -6,18 +6,17 @@ import { ApolloProvider } from '@apollo/client'
 import client from '../apollo-client'
 import { Toaster } from 'react-hot-toast'
 
-function MyApp({ Component, pageProps: {session, ...pageProps}}: AppProps) {
+
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <ApolloProvider client={client}>
       <SessionProvider session={session}>
-        <Toaster/>
-          
-            <Header/>
-            <Component {...pageProps} />
-          
-      </SessionProvider >
+        <Toaster />
+        <Header />
+        <Component {...pageProps} />
+      </SessionProvider>
     </ApolloProvider>
-  )
+  );
 }
 
 export default MyApp

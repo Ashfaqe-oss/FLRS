@@ -124,7 +124,7 @@ function PostBox({subrs}: Props) {
     return (
       <form
         onSubmit={onSubmit}
-        className="sticky top-0 z-50 m-3 p-2 rounded-md border border-gray-300
+        className="sticky top-0 z-5 m-3 p-2 rounded-md border border-gray-300
      bg-white my-5 mx-auto max-w-5xl"
       >
         <div className="flex place-items-center justify-center space-x-3 ">

@@ -68,16 +68,16 @@ type Query {
       table: "Post"
       configuration: "postgresql_config"
     )
-  # getPostListByPost_ID(post_id: ID!): [Post]
-  #   @dbquery(
-  #     type: "postgresql"
-  #     schema: "public"
-  #     query: """
-  #     select * from "Post"
-  #     where "Post"."id" = $1
-  #     """
-  #     configuration: "postgresql_config"
-  #   )
+  getPostListByPost_username(username: String!): [Post]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      select * from "Post"
+      where "username" = $1
+      """
+      configuration: "postgresql_config"
+    )
   getCommentUsingPost_id(id: ID!): [Comment]
     @dbquery(
       type: "postgresql"

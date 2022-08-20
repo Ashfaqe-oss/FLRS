@@ -14,7 +14,7 @@ function SubrsRow({ topic, index }: Props) {
       <p>{index + 1}</p>
       <ChevronUpIcon className="h-4 w-4 flex-shrink-0 text-green-400" />
       <Avatars seed={`/subrs/${topic}`} />
-      <p className="flex-1 truncate">{topic}</p>
+      <p className="flex-1 truncate">{topic.slice(0, 18)}</p>
       <Link href={`/subrs/${topic}`}>
         <div className="cursor-pointer rounded-full bg-red-500 px-3 text-white">
           View
